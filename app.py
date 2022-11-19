@@ -24,7 +24,7 @@ for i in range(6):
             h += 12
         times.append(f'{m} {h}')
 
-working_dir = '/home/zahin/code/prayer/'
+working_dir = '$HOME/code/prayer/'
 
 cronfile = working_dir+'times.txt'
 
