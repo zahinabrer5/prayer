@@ -13,12 +13,13 @@ next_prayer = json.loads(soup.find(id='common-config').text.strip())["nextPrayer
 
 # times = []
 
-red = '\033[0;31m'
+bold = '\033[1m'
+red = '\033[0;41m'
 nc = '\033[0m' # No color
 
-print('+---------+----------+')
-print('| Prayer  | Time     |')
-print('+---------+----------+')
+print(f'{bold}+---------+----------+')
+print(f'{bold}| Prayer  | Time     |')
+print(f'{bold}+---------+----------+')
 for i in range(6):
     prayer_name = prayer_names[i].text.strip()
     prayer_time = prayer_times[i].text.strip()
@@ -31,8 +32,8 @@ for i in range(6):
         upcoming = True
     color = red if upcoming else nc
 
-    print(f'| {color}{prayer_name}{nc}{space}| {color}{prayer_time}{nc} |')
-    print('+---------+----------+')
+    print(f'{color}{bold}| {prayer_name}{space}| {prayer_time} |{nc}')
+    print(f'{bold}+---------+----------+')
 
     """
     if prayer_name != 'Sunrise':
@@ -43,6 +44,8 @@ for i in range(6):
             h += 12
         times.append(f'{m} {h}')
     """
+
+print(nc, end='')
 
 """
 working_dir = '$HOME/code/prayer/'
