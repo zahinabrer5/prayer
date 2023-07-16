@@ -10,11 +10,14 @@ soup = BeautifulSoup(requests.get(url).content, 'html.parser')
 prayer_names = soup.find_all('span', class_='prayername')
 prayer_times = soup.find_all('span', class_='prayertime')
 next_prayer = json.loads(soup.find(id='common-config').text.strip())["nextPrayer"][5:]
+next_prayer_arr = ['fajar', 'dhuhar', 'asr', 'maghrib', 'isha']
+curr_prayer = next_prayer_arr[next_prayer_arr.index(next_prayer)-1]
 
 # times = []
 
 bold = '\033[1m'
 red = '\033[0;41m'
+green = '\033[0;42m'
 nc = '\033[0m' # No color
 
 print(f'{bold}+---------+----------+')
@@ -31,6 +34,13 @@ for i in range(6):
     if prayer_name == 'Dhuhr' and next_prayer == 'dhuhar':
         upcoming = True
     color = red if upcoming else nc
+
+    current = prayer_name.lower() == curr_prayer
+    if prayer_name == 'Fajr' and curr_prayer == 'fajar':
+        current = True
+    if prayer_name == 'Dhuhr' and curr_prayer == 'dhuhar':
+        current = True
+    color = green if current else color
 
     print(f'{color}{bold}| {prayer_name}{space}| {prayer_time} |{nc}')
     print(f'{bold}+---------+----------+')
