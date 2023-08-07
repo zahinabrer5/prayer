@@ -6,10 +6,18 @@ from bs4 import BeautifulSoup
 
 url = 'https://www.islamicfinder.org/world/canada/6094817/ottawa-prayer-times/'
 
+use_colour = True
+
 bold = '\033[1m'
 red = '\033[0;41m'
 green = '\033[0;42m'
 nc = '\033[0m' # No color
+
+if not use_colour:
+    bold = ''
+    red = ''
+    green = ''
+    nc = ''
 
 try:
     soup = BeautifulSoup(requests.get(url).content, 'html.parser')
