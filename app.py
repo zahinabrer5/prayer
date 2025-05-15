@@ -1,8 +1,8 @@
+import datetime
 import json
 import requests
 import sys
 from bs4 import BeautifulSoup
-from datetime import datetime, time
 
 
 def pad_right(s, c, l):
@@ -22,18 +22,19 @@ def military_time(t):
 
 
 def str_to_time(t):
-    return time(*(map(int, t.split(':'))))
+    return datetime.time(*(map(int, t.split(':'))))
 
 
 # increment day of Islamic month if current time has passed Maghrib time
 def print_date(prayer_times, date_islamic, date_greg, bold):
-    offset = 0
     maghrib = military_time(prayer_times[4].text.strip())
     maghrib_time = str_to_time(maghrib)
-    if datetime.today().time() > maghrib_time:
-        offset += 1
+    day_of_islamic_month = int(date_islamic_splitted[0])
+    print(day_of_islamic_month)
+    if datetime.datetime.today().time() > maghrib_time:
+        if day_of_islamic_month < 30:
+            day_of_islamic_month += 1
     date_islamic_splitted = date_islamic.split(' ')
-    day_of_islamic_month = int(date_islamic_splitted[0])+offset
     date_islamic = ' '.join([
         str(day_of_islamic_month),
         date_islamic_splitted[1],
@@ -102,6 +103,17 @@ def prayer(use_colour=True):
             s = f'| {padded_prayer_name}| {prayer_time} |{nc}'
             print(f'{color}{bold}'+s)
             print(f'{bold}+---------+----------+')
+
+        fajr_time = prayer_times[0].text.strip()
+        maghrib_time = prayer_times[4].text.strip()
+        today = datetime.date.today()
+        d1 = datetime.datetime.strptime(maghrib_time, '%I:%M %p').replace(day=today.day)
+        tomorrow = today + datetime.timedelta(days=1)
+        d2 = datetime.datetime.strptime(fajr_time, '%I:%M %p').replace(day=tomorrow.day)
+        midnight = (d1 + (d2 - d1) / 2).strftime('%I:%M %p')
+        s = f'| {pad_right('Qiyam', ' ', 8)}| {midnight} |{nc}'
+        print(f'{nc}{bold}'+s)
+        print(f'{bold}+---------+----------+')
         print(nc, end='')
 
     except:
